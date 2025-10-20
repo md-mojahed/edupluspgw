@@ -41,13 +41,14 @@ $data = [
     ]
 ];
 
+$eduplusPgw = EduplusPGW::of($apiKey, $gateway);
 // Create payment URL
-$paymentUrl = EduplusPGW::of($apiKey, $gateway)->getPaymentUrl($data);
+$response = $eduplusPgw->getPaymentUrl($data);
 
-if ($paymentUrl) {
-    echo "Redirect the user to: " . $paymentUrl;
+if ($response) {
+    echo "Redirect the user to: " . $response['payment_url'];
 } else {
-    print_r(EduplusPGW::of($apiKey, $gateway)->errors);
+    print_r($eduplusPgw->errors);
 }
 ```
 ------------------------------------------------------------
@@ -55,15 +56,13 @@ if ($paymentUrl) {
 ------------------------------------------------------------
 ```php
 $sessionId = 'EPGW_SESSION_ID';
-
-$sessionData = EduplusPGW::apiKey($apiKey)
-                ->gateway($gateway)
-                ->getPaymentSession($sessionId);
+$eduplusPgw = EduplusPGW::of($apiKey, $gateway);
+$sessionData = $eduplusPgw->getPaymentSession($sessionId);
 
 if ($sessionData) {
     print_r($sessionData);
 } else {
-    print_r(EduplusPGW::apiKey($apiKey)->errors);
+    print_r($eduplusPgw->errors);
 }
 ```
 ------------------------------------------------------------
@@ -81,7 +80,7 @@ API Methods
 
 - getPaymentUrl(array $data)
   Sends a request to create a payment URL for the specified gateway.
-  Returns the URL string if successful, null on failure.
+  Returns the array of payment_url if successful, null on failure.
 
 - getPaymentSession(string $session)
   Retrieves payment session details by session ID.

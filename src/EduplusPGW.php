@@ -13,7 +13,7 @@ class EduplusPGW {
     public function __construct()
     {
         $this->api = new Client([
-            'base_uri' => "https://pgw.eduplus-bd.com/api"
+            'base_uri' => "https://pgw.eduplus-bd.com"
         ]);
     }
 
@@ -30,9 +30,6 @@ class EduplusPGW {
     public function setApiKey($apiKey = null)
     {
         $this->apiKey = $apiKey;
-        $this->api = $this->api->withHeaders([
-            'api-key' => $this->apiKey
-        ]);
         return $this;
     }
 
@@ -44,15 +41,19 @@ class EduplusPGW {
 
     public function getPaymentUrl(array $data)
     {
-        $response = $this->api->post("/create/{$this->gatewayKey}/payment-url", [
-            'json' => $data
+        $response = $this->api->post("/api/create/{$this->gatewayKey}/payment-url", [
+            'json' => $data,
+            'headers' => [
+                'api-key' => $this->apiKey,
+                'Accept' => 'application/json',
+            ]
         ]);
 
         if($response->getStatusCode() === 200) {
             $data = json_decode($response->getBody()->getContents(), true) ?? [];
 
-            if($data['status'] == 'success') {
-                return $data['payment_url'];
+            if(isset($data['status'])) {
+                return $data;
             }
             $this->errors[] = $data['message'] ?? "Request failed! status code: " . $response->getStatusCode();
             return null;
@@ -63,7 +64,12 @@ class EduplusPGW {
 
     public function getPaymentSession(string $session)
     {
-        $response = $this->api->get("/session/{$session}");
+        $response = $this->api->get("/api/session/{$session}", [
+            'headers' => [
+                'api-key' => $this->apiKey,
+                'Accept' => 'application/json',
+            ]
+        ]);
 
         if ($response->getStatusCode() === 200) {
             $data = json_decode($response->getBody()->getContents(), true) ?? [];
