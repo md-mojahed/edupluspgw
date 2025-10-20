@@ -1,0 +1,25 @@
+{
+    "name": "mojahed/edupluspgw",
+    "description": "Eduplus Payment Gateway SDK for PHP.",
+    "type": "library",
+    "version" : "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Md Mojahedul Islam",
+            "email": "dev.mojahedul@gmail.com",
+            "homepage": "https://md-mojahed.github.io"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mojahed\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
