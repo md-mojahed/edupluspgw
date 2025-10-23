@@ -4,8 +4,8 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Mojahed\EduplusPGW;
 
-$apiKey = 'JRSZO268F4F9DA7B320';
-$gateway = 'bkash';
+$apiKey = 'JRSZO%2#68bcF4Ffd9DA7B33320';
+$gateway = 'sslcommerz';
 $eduplusPGW = EduplusPGW::of($apiKey, $gateway);
 $response = $eduplusPGW->getPaymentUrl([
     'amount' => 100,
@@ -34,4 +34,16 @@ $paymentSession = $eduplusPGW->getPaymentSession($session);
 
 print_r([
     $paymentSession
+]);
+
+$paymentInvoice = $eduplusPGW->getInvoiceDetails($paymentSession['invoice_number']);
+
+print_r([
+    $paymentInvoice
+]);
+
+$paymentGatewayInvoice = $eduplusPGW->getGatewayInvoice($gateway, $paymentSession['invoice_number']);
+
+print_r([
+    $paymentGatewayInvoice
 ]);

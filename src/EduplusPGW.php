@@ -83,4 +83,48 @@ class EduplusPGW {
         $this->errors[] = "Request failed! status code: " . $response->getStatusCode();
         return null;
     }
+
+    public function getInvoiceDetails($invoice)
+    {
+        $response = $this->api->get("/api/invoice/{$invoice}", [
+            'headers' => [
+                'api-key' => $this->apiKey,
+                'Accept' => 'application/json',
+            ]
+        ]);
+
+        if ($response->getStatusCode() === 200) {
+            $data = json_decode($response->getBody()->getContents(), true) ?? [];
+
+            if ($data['status'] == 'success') {
+                return $data['payment_session'];
+            }
+            $this->errors[] = $data['message'] ?? "Request failed! status code: " . $response->getStatusCode();
+            return null;
+        }
+        $this->errors[] = "Request failed! status code: " . $response->getStatusCode();
+        return null;
+    }
+
+    public function getGatewayInvoice($gateway, $invoice)
+    {
+        $response = $this->api->get("/api/{$gateway}/invoice/{$invoice}", [
+            'headers' => [
+                'api-key' => $this->apiKey,
+                'Accept' => 'application/json',
+            ]
+        ]);
+
+        if ($response->getStatusCode() === 200) {
+            $data = json_decode($response->getBody()->getContents(), true) ?? [];
+
+            if ($data['status'] == 'success') {
+                return $data['payment_data'];
+            }
+            $this->errors[] = $data['message'] ?? "Request failed! status code: " . $response->getStatusCode();
+            return null;
+        }
+        $this->errors[] = "Request failed! status code: " . $response->getStatusCode();
+        return null;
+    }
 }
