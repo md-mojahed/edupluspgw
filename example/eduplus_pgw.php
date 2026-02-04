@@ -47,3 +47,9 @@ $paymentGatewayInvoice = $eduplusPGW->getGatewayInvoice($gateway, $paymentSessio
 print_r([
     $paymentGatewayInvoice
 ]);
+
+$paymentSessionPosted = $eduplusPGW->markAsPosted($session);
+
+print_r([
+    $paymentSessionPosted
+]);

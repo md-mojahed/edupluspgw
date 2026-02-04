@@ -86,6 +86,10 @@ API Methods
   Retrieves payment session details by session ID.
   Returns an array of payment session data if successful, null on failure.
 
+- markAsPosted(string $session)
+  Marks payment session as posted.
+  Returns true or false.
+
 - $errors
   Array containing error messages from the last request.
 

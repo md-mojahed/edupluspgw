@@ -127,4 +127,26 @@ class EduplusPGW {
         $this->errors[] = "Request failed! status code: " . $response->getStatusCode();
         return null;
     }
+
+    public function markAsPosted(string $session)
+    {
+        $response = $this->api->post("/api/session/{$session}/posted", [
+            'headers' => [
+                'api-key' => $this->apiKey,
+                'Accept' => 'application/json',
+            ]
+        ]);
+
+        if ($response->getStatusCode() === 200) {
+            $data = json_decode($response->getBody()->getContents(), true) ?? [];
+
+            if ($data['status'] == 'success') {
+                return true;
+            }
+            $this->errors[] = $data['message'] ?? "Request failed! status code: " . $response->getStatusCode();
+            return false;
+        }
+        $this->errors[] = "Request failed! status code: " . $response->getStatusCode();
+        return false;
+    }
 }
